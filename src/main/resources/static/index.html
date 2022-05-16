@@ -29,6 +29,12 @@
 
             let puzzleId = document.getElementById('fmPuzzleIdInput').value;
             let puzzleResponse = document.getElementById('fmPuzzleResponseInput').value;
+
+            if(puzzleResponse.length>10){
+                alert("Invalid input. Answer has length greater that puzzle");
+                return;
+            }
+
             let data = {
                 id: puzzleId,
                 response: puzzleResponse
