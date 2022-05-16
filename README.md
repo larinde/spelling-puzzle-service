@@ -11,6 +11,10 @@ Building and running the app:
 
 This application renders a UI that calls a downstream service running on localhost port 8080.
 
+```
+ http://localhost:8080/
+```
+
 Below is a brief description of the API operations:
 
 | Action                     | HTTP Method  | URI                      |
