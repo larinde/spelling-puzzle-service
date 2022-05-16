@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spelling Puzzle</title>
+    <script>
+        const apiEndpoint = 'http://localhost:8080/api/puzzles';
+
+        async function getPuzzle() {
+            try {
+                let res = await fetch(apiEndpoint);
+                return await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        async function renderPuzzle(){
+            let puzzle = await getPuzzle();
+            document.getElementById("puzzle").innerHTML = puzzle.puzzle;
+            document.getElementById("fmPuzzleIdInput").value = puzzle.id;
+        }
+
+        async function sendAnswer(){
+            let puzzleForm = document.getElementById('puzzleForm');
+            puzzleForm.addEventListener('submit', function(ev){
+                ev.preventDefault();
+            });
+
+            let puzzleId = document.getElementById('fmPuzzleIdInput').value;
+            let puzzleResponse = document.getElementById('fmPuzzleResponseInput').value;
+            let data = {
+                id: puzzleId,
+                response: puzzleResponse
+            }
+            console.log("sending json body " + data);
+            try {
+                let res = await fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                return await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        async function renderResult(){
+            let result = await sendAnswer();
+            console.log("rendering result....");
+            if(result.isCorrect == true){
+                document.getElementById('puzzleResult').innerHTML = "That's right, " + result.result
+            }else{
+                document.getElementById('puzzleResult').innerHTML = "Wrong. The right word is " + result.result
+            }
+        }
+
+        renderPuzzle()
+
+    </script>
+</head>
+
+<body>
+  <h2 align="center">Spelling Quiz</h2>
+  <div class="container" align="center" id="root">
+      <form  id="puzzleForm">
+          <input type="hidden" id="fmPuzzleIdInput" value="" />
+          Complete spelling: <span id="puzzle"></span> 
+          <br/>
+          Answer: <input type="text" id="fmPuzzleResponseInput"/> 
+          <br/><br/>
+          <button type="submit" id="fmSendAnswerInput" onclick="renderResult()">Check answer</button>
+      </form>
+      <br/>
+      <span id="puzzleResult"></span> 
+  </div>
+
+</body>
+</html>

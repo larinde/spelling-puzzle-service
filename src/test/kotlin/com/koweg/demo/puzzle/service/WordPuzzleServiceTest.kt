@@ -13,7 +13,7 @@ class WordPuzzleServiceTest {
 
     @Test
     fun `should load word puzzles from text file`(){
-        val puzzle = wordPuzzleService.gneratePuzzle();
+        val puzzle = wordPuzzleService.generatePuzzle();
         assertThat(puzzle).isNotNull
 
     }
